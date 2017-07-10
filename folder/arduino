@@ -1,0 +1,61 @@
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(12,11,5,4,3,2);
+
+int switchPin = 13;
+unsigned long currentTime = 0;
+
+boolean buttonHasEverBeenPressed = false;
+
+const int greenLedPin = 8;
+const int yellowLedPin = 9;
+const int redLedPin = 10;
+
+long freshTime = 20000;
+long badTime = 40000;
+
+int photocellValue;
+
+const int piezoPin = 7;
+
+void setup() {
+  
+Serial.begin(9600);
+
+lcd.begin(16,2);
+lcd.print("Container for");
+lcd.setCursor(0,1);
+lcd.print("Vegetables");
+  
+pinMode(greenLedPin, OUTPUT);
+pinMode(yellowLedPin, OUTPUT);
+pinMode(redLedPin, OUTPUT);
+pinMode(piezoPin, OUTPUT);
+pinMode(switchPin, INPUT);
+
+photocellValue = analogRead(A0);
+ 
+testTimer();
+}
+
+// the loop routine runs over and over again forever:
+void loop() {
+
+if (isButtonPressed() == true)
+  {
+    Serial.println("yes");
+    resetTimer();
+  }
+
+if (buttonHasEverBeenPressed == true)
+  {
+    Serial.println(getTimerTime());
+  }
+ 
+  illuminateLED();
+
+  delay(1);  
+
+}
+
+
+
